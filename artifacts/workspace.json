@@ -1,0 +1,17 @@
+{
+  "root": "/home/dev/feedback/uid34511",
+  "B": "/home/dev/feedback/uid34511",
+  "sha": "62e22e9f0d8ace62fa6f57c17ccdfe48bd4eccfa",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "squid-cache",
+    "repo": "squid",
+    "sha": "62e22e9f0d8ace62fa6f57c17ccdfe48bd4eccfa"
+  },
+  "fork": {
+    "owner": "Rrr119",
+    "repo": "squid",
+    "cloneUrl": "https://github.com/Rrr119/squid.git"
+  },
+  "at": "2026-11-22T19:28:14.138Z"
+}

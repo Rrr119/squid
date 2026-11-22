@@ -1351,6 +1351,31 @@ ENDIF
 	  # as the browser needs to be configured for using a proxy in order
 	  # to respond to proxy authentication.
 
+	acl aclname user_domain [-i] username domain [username domain ...]
+	  # authenticated username and destination domain pair [slow]
+	  #
+	  # Each username is paired with the immediately following domain. A rule
+	  # matches only when the authenticated username and the request destination
+	  # host match the same pair. Multiple pairs may be configured on one line
+	  # or by repeating the acl directive with the same name.
+	  #
+	  # Domains use dstdomain ACL semantics: example.com matches only that
+	  # domain, while .example.com also matches its subdomains. Use ANY as a
+	  # username or domain wildcard. The ACL still requires successful client
+	  # authentication when a wildcard is used.
+	  #
+	  # The -i option makes username comparisons case-insensitive. Domains are
+	  # always compared case-insensitively.
+	  #
+	  # This ACL uses the same authentication configuration and challenge
+	  # mechanism as proxy_auth; see auth_param. It cannot be used in a
+	  # transparent/intercepting proxy.
+	  #
+	  # Example:
+	  #	acl authenticated_users proxy_auth REQUIRED
+	  #	acl department_sites user_domain alice .example.com bob example.org
+	  #	http_access allow authenticated_users department_sites
+
 	acl aclname snmp_community string ...
 	  # A community string to limit access to your SNMP Agent [fast]
 	  # Example:
@@ -6493,6 +6518,26 @@ DOC_START
 	option,	users may not get objects from cache.
 	This options sets default queue-size option of the store_id_children
 	to 0.
+DOC_END
+
+NAME: user_domain_cache_isolation
+TYPE: onoff
+LOC: Config.onoff.user_domain_cache_isolation
+DEFAULT: off
+DOC_START
+	When enabled, Squid includes the authenticated proxy username in the
+	public cache key. Responses cached for one user are then not returned to
+	a different user, or to an unauthenticated client, even when the request
+	URL is identical.
+
+	This option is intended for deployments that use authenticated ACLs to
+	serve user-specific content. It should be used together with user_domain
+	(or equivalent authenticated) ACLs. Enable it before starting Squid so
+	that requests do not see shared cache entries created by an earlier
+	configuration.
+
+	Cache digests, ICP, and HTCP do not carry the authenticated username.
+	Do not rely on those shared-cache mechanisms to preserve user isolation.
 DOC_END
 
 COMMENT_START

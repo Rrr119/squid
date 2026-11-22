@@ -300,6 +300,7 @@ public:
         int strip_query_terms;
         int redirector_bypass;
         int store_id_bypass;
+        int user_domain_cache_isolation;
         int ignore_unknown_nameservers;
         int client_pconns;
         int server_pconns;

@@ -1728,9 +1728,58 @@ tests_testACLMaxUserIP_LDADD = \
 	$(COMPAT_LIB) \
 	$(XTRA_LIBS)
 tests_testACLMaxUserIP_LDFLAGS = $(LIBADD_DL)
+
+check_PROGRAMS += tests/testUserDomainAcl
+tests_testUserDomainAcl_SOURCES = \
+	tests/testUserDomainAcl.cc
+nodist_tests_testUserDomainAcl_SOURCES = \
+	tests/stub_CachePeer.cc \
+	ConfigParser.cc \
+	tests/stub_HelperChildConfig.cc \
+	tests/stub_HttpHeader.cc \
+	tests/stub_HttpRequest.cc \
+	tests/stub_MemBuf.cc \
+	Parsing.cc \
+	tests/stub_StatHist.cc \
+	String.cc \
+	tests/stub_access_log.cc \
+	tests/stub_cache_cf.cc \
+	tests/stub_cache_manager.cc \
+	tests/stub_cbdata.cc \
+	tests/stub_client_side.cc \
+	tests/stub_debug.cc \
+	dlink.cc \
+	tests/stub_errorpage.cc \
+	tests/stub_fatal.cc \
+	globals.cc \
+	tests/stub_libauth.cc \
+	tests/stub_libcomm.cc \
+	tests/stub_libhttp.cc \
+	tests/stub_libmem.cc \
+	tests/stub_libsecurity.cc \
+	tests/stub_neighbors.cc
+tests_testUserDomainAcl_LDADD = \
+	$(AUTH_ACL_LIBS) \
+	acl/libapi.la \
+	acl/libstate.la \
+	acl/libacls.la \
+	anyp/libanyp.la \
+	SquidConfig.o \
+	ip/libip.la \
+	parser/libparser.la \
+	sbuf/libsbuf.la \
+	base/libbase.la \
+	$(top_builddir)/lib/libmiscencoding.la \
+	$(SSLLIB) \
+	$(LIBCPPUNIT_LIBS) \
+	$(LIBGNUTLS_LIBS) \
+	$(COMPAT_LIB) \
+	$(XTRA_LIBS)
+tests_testUserDomainAcl_LDFLAGS = $(LIBADD_DL)
 else
 EXTRA_DIST += \
-	tests/testACLMaxUserIP.cc
+	tests/testACLMaxUserIP.cc \
+	tests/testUserDomainAcl.cc
 endif
 
 ## Tests of html/*

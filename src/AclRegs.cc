@@ -95,6 +95,7 @@
 #if USE_AUTH
 #include "auth/AclMaxUserIp.h"
 #include "auth/AclProxyAuth.h"
+#include "auth/UserDomainAcl.h"
 #endif
 #include "base/RegexPattern.h"
 #include "ExternalACL.h"
@@ -269,6 +270,8 @@ Acl::Init()
     RegisterMaker("ext_user_regex", [](TypeName name)->Node* { return new ACLExtUser(new ACLRegexData, name); });
     RegisterMaker("proxy_auth", [](TypeName name)->Node* { return new ACLProxyAuth(new ACLUserData, name); });
     RegisterMaker("proxy_auth_regex", [](TypeName name)->Node* { return new ACLProxyAuth(new ACLRegexData, name); });
+    RegisterMaker("user_domain", [](TypeName name)->Node* { return new UserDomainAcl(name); });
+    RegisterMaker("user_dstdomain", [](TypeName name)->Node* { return new UserDomainAcl(name); });
     RegisterMaker("max_user_ip", [](TypeName name)->Node* { return new ACLMaxUserIP(name); });
 #endif
 

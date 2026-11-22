@@ -9,8 +9,12 @@
 /* DEBUG: section 20    Storage Manager MD5 Cache Keys */
 
 #include "squid.h"
+#if USE_AUTH
+#include "auth/UserRequest.h"
+#endif
 #include "HttpRequest.h"
 #include "md5.h"
+#include "SquidConfig.h"
 #include "store_key_md5.h"
 
 const char *
@@ -124,6 +128,23 @@ storeKeyPublicByRequestMethod(HttpRequest * request, const HttpRequestMethod& me
     SquidMD5Update(&M, (unsigned char *) url.rawContent(), url.length());
     if (keyScope)
         SquidMD5Update(&M, &keyScope, sizeof(keyScope));
+
+    if (Config.onoff.user_domain_cache_isolation) {
+        SBuf userScope;
+#if USE_AUTH
+        if (request->auth_user_request) {
+            if (request->auth_user_request->user())
+                userScope = request->auth_user_request->user()->userKey();
+            if (userScope.isEmpty() && request->auth_user_request->username())
+                userScope = request->auth_user_request->username();
+        }
+#endif
+        const uint32_t userLen = userScope.length();
+        SquidMD5Update(&M, reinterpret_cast<const unsigned char *>(&userLen), sizeof(userLen));
+        if (userLen)
+            SquidMD5Update(&M, reinterpret_cast<const unsigned char *>(userScope.rawContent()), userLen);
+        debugs(20, 3, "updating public key by user: " << (userLen ? userScope : SBuf("[anonymous]")) << " for: " << url);
+    }
 
     if (!request->vary_headers.isEmpty()) {
         SquidMD5Update(&M, request->vary_headers.rawContent(), request->vary_headers.length());

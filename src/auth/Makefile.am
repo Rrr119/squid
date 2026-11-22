@@ -58,7 +58,9 @@ libacls_la_SOURCES = \
 	AclMaxUserIp.h \
 	AclProxyAuth.cc \
 	AclProxyAuth.h \
-	AuthAclState.h
+	AuthAclState.h \
+	UserDomainAcl.cc \
+	UserDomainAcl.h
 
 CredentialState.cc: CredentialState.h $(top_srcdir)/src/mk-string-arrays.awk
 	$(AM_V_GEN) $(AWK) -f $(top_srcdir)/src/mk-string-arrays.awk $(srcdir)/CredentialState.h > $@ || ($(RM) $@ ; exit 1)
